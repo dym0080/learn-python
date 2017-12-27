@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# 从wsgiref模块导入:
-from wsgiref.simple_server import make_server
-# 导入我们自己编写的application函数:
-from hello import application
+import inspect
 
-# 创建一个服务器，IP地址为空，端口是8000，处理函数是application:
-httpd = make_server('', 8000, application)
-print('Serving HTTP on port 8000...')
-# 开始监听HTTP请求:
-httpd.serve_forever()
+def a(a,b=0,*c,d,e=1,**f):
+    pass
+
+aa=inspect.signature(a)
+# print("inspect.signature（fn)是:%s" % aa)
+# print("inspect.signature（fn)的类型：%s" % (type(aa)))
+# print("\n")
+
+
+bb = aa.parameters
+print("signature.paramerters属性是:%s" % bb)
+print("\n")
+print("ignature.paramerters属性的类型是%s" % type(bb))
+print("\n")
