@@ -141,19 +141,35 @@ async def auth_factory(app, handler):
 	return auth
 
 
+if __name__ == '__main__':  
+  
+    async def init(loop):  
+        await orm.create_pool(loop, **configs['db']) # 添加配置文件  
+        app = web.Application(loop = loop, middlewares=[logger_factory, response_factory])  
+        init_jinja2(app, filters=dict(datetime = datetime_filter))  
+        add_routes(app, 'test_view')  
+        add_static(app)  
+        srv = await loop.create_server(app.make_handler(), 'localhost', 9000)  
+        logging.info('server started at http://127.0.0.1:9000...')  
+        return srv  
+  
+    loop = asyncio.get_event_loop()  
+    loop.run_until_complete(init(loop))  
+    loop.run_forever()   
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-	async def init(loop):
-		await orm.create_pool(loop, **configs['db']) # 添加配置文件
-		app = web.Application(loop = loop, middlewares=[logger_factory, auth_factory, response_factory])
-		init_jinja2(app, filters=dict(datetime = datetime_filter))
-		add_routes(app, 'handler')
-		add_static(app)
-		srv = await loop.create_server(app.make_handler(), 'localhost', 9000)
-		logging.info('server started at http://127.0.0.1:9000...')
-		return srv
+# 	async def init(loop):
+# 		await orm.create_pool(loop, **configs['db']) # 添加配置文件
+# 		app = web.Application(loop = loop, middlewares=[logger_factory, auth_factory, response_factory])
+# 		init_jinja2(app, filters=dict(datetime = datetime_filter))
+# 		add_routes(app, 'handler')
+# 		add_static(app)
+# 		srv = await loop.create_server(app.make_handler(), 'localhost', 9000)
+# 		logging.info('server started at http://127.0.0.1:9000...')
+# 		return srv
+ 
 
-	loop = asyncio.get_event_loop()
-	loop.run_until_complete(init(loop))
-	loop.run_forever()
+# 	loop = asyncio.get_event_loop()
+# 	loop.run_until_complete(init(loop))
+# 	loop.run_forever()

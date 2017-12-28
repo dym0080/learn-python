@@ -27,8 +27,9 @@ async def create_pool(loop, **kw):
 # 单独封装select
 async def select(sql, args, size=None):
 	log(sql, args)
-	global __pool
-	async with __pool.get() as conn:  # 或--> with await __pool as conn:
+	# global __pool
+	with await __pool as conn:
+	# async with __pool.get() as conn:  # 或--> with await __pool as conn:
 		# 创建一个DictCursor类指针，返回dict形式的结果集
 		async with conn.cursor(aiomysql.DictCursor) as cur:
 		# SQL语句占位符为?，MySQL为%s。
